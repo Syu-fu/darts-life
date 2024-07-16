@@ -6,14 +6,10 @@ import {
 export const calculateZeroOneBullStats = async (date: string) => {
   const hits = await getZeroOneBullHitsForDate(date);
 
-  const bullCount = hits.filter((hit) => hit === 3).length;
-  const lowTonCount = hits.filter((hit) => hit === 2).length;
-  const hatCount = hits.filter((hit) => hit === 1).length;
-
   const stats = {
-    bull_count: bullCount,
-    low_ton_count: lowTonCount,
-    hat_count: hatCount,
+    bull_count: hits.oneHits,
+    low_ton_count: hits.twoHits,
+    hat_count: hits.threeHits,
   };
 
   return stats;

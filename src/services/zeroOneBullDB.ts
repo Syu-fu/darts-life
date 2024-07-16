@@ -95,12 +95,31 @@ export const getZeroOneBullHitsForDate = async (date: string) => {
   const db = getDatabase();
   const result = await db.query(
     `
-    SELECT hits FROM zero_one_bull WHERE date = ?
+    SELECT 
+      SUM(CASE WHEN hits = 0 THEN 1 ELSE 0 END) AS zeroHits,
+      SUM(CASE WHEN hits = 1 THEN 1 ELSE 0 END) AS oneHits,
+      SUM(CASE WHEN hits = 2 THEN 1 ELSE 0 END) AS twoHits,
+      SUM(CASE WHEN hits = 3 THEN 1 ELSE 0 END) AS threeHits
+    FROM zero_one_bull 
+      WHERE date = ?
   `,
     [date],
   );
 
-  return result.values ? result.values.map((row) => row.hits) : [];
+  const { zeroHits, oneHits, twoHits, threeHits } = (result.values &&
+    result.values[0]) || {
+    zeroHits: 0,
+    oneHits: 0,
+    twoHits: 0,
+    threeHits: 0,
+  };
+
+  return {
+    zeroHits,
+    oneHits,
+    twoHits,
+    threeHits,
+  };
 };
 
 export const getZeroOneBullHitsCount = async () => {
