@@ -45,8 +45,8 @@ const ZeroOneBullPage: React.FC = () => {
     const threeHits = Number(todayHits.threeHits);
     const rounds = Number(todayHits.rounds);
     const bullHits = oneHits + twoHits * 2 + threeHits * 3;
-    const lowTonRate = twoHits / rounds;
-    const hatRate = threeHits / rounds;
+    const lowTonRate = (twoHits / rounds) * 100;
+    const hatRate = (threeHits / rounds) * 100;
     const bullRate = calculateBullRate(bullHits, rounds);
     const bullRoundRate = calculateBullRoundRate(
       todayHits.oneHits,
