@@ -8,10 +8,12 @@ import {
   saveZeroOneBullRoundHits,
   getZeroOneBullHitsCountToday,
 } from "../services/zeroOneBullDB";
+import Modal from "../components/Modal";
 
 const ZeroOneBullPage: React.FC = () => {
   const [round, setRound] = useState(1);
   const [stats, setStats] = useState<{ menu: string; value: string }[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const target = "Bull";
   const buttons = [0, 1, 2, 3];
@@ -35,6 +37,10 @@ const ZeroOneBullPage: React.FC = () => {
 
   const handleHit = async (hit: number) => {
     await saveZeroOneBullRoundHits(round, hit);
+    setIsModalVisible(true);
+    setTimeout(() => {
+      setIsModalVisible(false);
+    }, 1000);
     await updateStats();
   };
 
@@ -71,13 +77,16 @@ const ZeroOneBullPage: React.FC = () => {
   };
 
   return (
-    <PracticeLayout
-      target={target}
-      round={round}
-      buttons={buttons}
-      stats={stats}
-      onHit={handleHit}
-    />
+    <>
+      <PracticeLayout
+        target={target}
+        round={round}
+        buttons={buttons}
+        stats={stats}
+        onHit={handleHit}
+      />
+      <Modal round={round} isVisible={isModalVisible} />
+    </>
   );
 };
 
